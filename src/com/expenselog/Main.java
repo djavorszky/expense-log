@@ -3,8 +3,6 @@ package com.expenselog;
 import com.expenselog.persistence.CSVPersistence;
 import com.expenselog.tasks.Task;
 
-import java.io.File;
-
 /**
  * Created by djavorszky on 03/10/15.
  */

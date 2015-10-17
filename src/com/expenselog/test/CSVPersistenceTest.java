@@ -1,4 +1,4 @@
-package com.expenselog.persistence.test;
+package com.expenselog.test;
 
 import com.expenselog.Transaction;
 import com.expenselog.persistence.CSVPersistence;

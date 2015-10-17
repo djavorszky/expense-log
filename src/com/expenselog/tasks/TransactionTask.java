@@ -4,8 +4,6 @@ import com.expenselog.Transaction;
 import com.expenselog.persistence.CSVPersistence;
 import com.expenselog.tasks.exception.IncompleteTaskException;
 
-import java.util.HashMap;
-
 /**
  * This class validates the task, creates a transaction and saves it in the CSV file as per its profileName.
  *
