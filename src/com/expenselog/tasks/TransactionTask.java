@@ -1,36 +1,32 @@
 package com.expenselog.tasks;
 
+import com.expenselog.Transaction;
+import com.expenselog.persistence.CSVPersistence;
 import com.expenselog.tasks.exception.IncompleteTaskException;
+
+import java.util.HashMap;
 
 /**
  * Created by javdaniel on 17/10/15.
  */
 public class TransactionTask extends Task {
 
-    private boolean expense = true;
-
     @Override
     public boolean execute() {
+
         try {
             validateTask();
         }
         catch (IncompleteTaskException ite) {
             System.out.println("Task is invalid, there are missing parameters");
-            ite.printStackTrace();
+            // TODO print all parameters of the Task in quesiton.
             return false;
         }
 
-        if (amount == 0) {
-            System.out.println("Amount is zero for Transaction, which is not allowed.");
-            return false;
-        }
-        else if (amount > 0) {
-            expense = false;
-        }
+        Transaction transaction = new Transaction(date, amount, categoryName, description, profileName);
 
+        return CSVPersistence.saveTransaction(transaction);
 
-
-        return false;
     }
 
 }

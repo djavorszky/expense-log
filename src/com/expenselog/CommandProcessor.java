@@ -16,19 +16,21 @@ public class CommandProcessor {
         Task task = null;
         if (args[0].equals("list")) {
             task = new ListTask();
-
-            task.setProfileName(args[1]);
-
         }
         else if (args[0].equals("add-expense") || args[0].equals("add-income")) {
             task = new TransactionTask();
-            task.setAmount(Double.valueOf(args[1]));
+            if (args[0].equals("add-expense")) {
+                task.setAmount(Double.valueOf(args[1]) * -1);
+            }
+            else {
+                task.setAmount(Double.valueOf(args[1]));
+            }
         }
 
         task.setCategoryName("Default category");
         task.setDate(new Date());
         task.setDescription("some description");
-        task.setProfileName("someProfile");
+        task.setProfileName("default2");
         return task;
     }
 

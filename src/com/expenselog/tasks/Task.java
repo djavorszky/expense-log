@@ -3,6 +3,7 @@ package com.expenselog.tasks;
 import com.expenselog.tasks.exception.IncompleteTaskException;
 
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * The abstract Task class should be extended by each tasks. It provides the bare necessities that every Task object
@@ -32,14 +33,6 @@ public abstract class Task {
         if (profileName == null || date == null || categoryName == null) {
             throw new IncompleteTaskException();
         }
-    }
-
-    @Override
-    public String toString() {
-        String representation = "";
-
-
-        return representation;
     }
 
     public double getAmount() {
