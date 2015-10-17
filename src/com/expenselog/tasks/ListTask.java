@@ -5,7 +5,9 @@ import com.expenselog.persistence.CSVPersistence;
 import java.util.ArrayList;
 
 /**
- * Created by javdaniel on 15/10/15.
+ * This class is responsible for printing the profile's saved entries to the standard out.
+ *
+ * Created by Dániel Jávorszky on 15/10/15.
  */
 public class ListTask extends Task {
 

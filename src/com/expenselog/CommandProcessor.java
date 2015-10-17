@@ -7,7 +7,7 @@ import com.expenselog.tasks.TransactionTask;
 import java.util.Date;
 
 /**
- * Created by javdaniel on 15/10/15.
+ * Created by Dániel Jávorszky on 15/10/15.
  */
 public class CommandProcessor {
 

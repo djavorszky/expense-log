@@ -7,7 +7,9 @@ import com.expenselog.tasks.exception.IncompleteTaskException;
 import java.util.HashMap;
 
 /**
- * Created by javdaniel on 17/10/15.
+ * This class validates the task, creates a transaction and saves it in the CSV file as per its profileName.
+ *
+ * Created by Dániel Jávorszky on 17/10/15.
  */
 public class TransactionTask extends Task {
 

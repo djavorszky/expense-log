@@ -3,13 +3,25 @@ package com.expenselog;
 import com.sun.org.apache.xml.internal.utils.StringBufferPool;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * This class is the model for an individual transaction.
+ *
+ * Created by Dániel Jávorszky on 17/10/15.
+ * Created by Ádám Nagy on 17/10/15.
+ */
+
 public class Transaction {
 
-	public Transaction (Date date, double amount, String categoryName, String description, String profileName) {
+	public Transaction(Date date, double amount, String categoryName, String description, String profileName) {
+		this(date, amount, categoryName, description, profileName, 1);
+	}
 
+	public Transaction(Date date, double amount, String categoryName, String description, String profileName,
+						int transactionId) {
 		this.date = date;
 		this.amount = amount;
 		this.categoryName = categoryName;
@@ -17,7 +29,7 @@ public class Transaction {
 		this.profileName = profileName;
 
 		// TODO implement ids.
-		this.transactionId = 1;
+		this.transactionId = transactionId;
 	}
 
 	public double getAmount() {
@@ -44,6 +56,10 @@ public class Transaction {
 		return categoryName;
 	}
 
+	public int getTransactionId() {
+		return transactionId;
+	}
+
 	@Override
 	public String toString() {
 		return toString(false);
@@ -67,10 +83,24 @@ public class Transaction {
 		return sb.toString();
 	}
 
-	public static Transaction toTransaction(String representation) {
+	public static Transaction toTransaction(String representation, String profileName) {
 		String[] array = representation.split(";");
 
-		return null;
+		DateFormat dt = new SimpleDateFormat("dd/MMM/yyy - HH:mm");
+		Date date = null;
+		try {
+			date = dt.parse(array[0]);
+		}
+		catch (ParseException pe) {
+			pe.printStackTrace();
+			return null;
+		}
+		double amount = Double.valueOf(array[1]);
+		String categoryName = array[2];
+		String description = array[3];
+		int transactionId = Integer.valueOf(array[4]);
+
+		return new Transaction(date, amount, categoryName, description, profileName);
 
 	}
 
@@ -81,5 +111,7 @@ public class Transaction {
 	private final String categoryName;
 	private final String description;
 	private final String profileName;
+
+
 	private final int transactionId;
 }
