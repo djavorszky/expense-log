@@ -1,13 +1,13 @@
-package com.expenselog;
+package com.expenselog.tasks;
 
 /**
  * Created by javdaniel on 15/10/15.
  */
-public class List extends Command {
+public class ListTask extends Task {
 
     @Override
     public boolean execute() {
-        
+
         return false;
     }
 }

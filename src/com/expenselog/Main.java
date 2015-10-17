@@ -1,5 +1,7 @@
 package com.expenselog;
 
+import com.expenselog.tasks.Task;
+
 /**
  * Created by djavorszky on 03/10/15.
  */
@@ -9,18 +11,22 @@ public class Main {
 
         // Step 1: Process command.
 
-        Command c = null;
-        try {
-            c = CommandProcessor.processArguments(args);
-        }
-        catch (InvalidCommandException ice) {
-            // something
+        System.out.println("Printing arguments:");
+        for (String s : args) {
+            System.out.println(s);
         }
 
-        // Step 2: Execute the command
+        Task task = CommandProcessor.processArguments(args);
 
-        boolean success = c.execute();
+        // Step 2: Check if profile csv already exists. Read if command says so.
 
-        // Step 3: Post-process-
+        String profile = task.getProfileName();
+
+        // Magic check if file exists, then read it... etc.
+
+
+        // Step 3: Execute the command
+
+        boolean success = task.execute();
     }
 }
