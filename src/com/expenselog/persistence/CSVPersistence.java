@@ -131,6 +131,11 @@ public class CSVPersistence {
         return fileArray;
     }
 
+    /**
+     * Delete a profile and unset all in-memory objects.
+     * @param profileName The name of the profile that should be deleted.
+     * @return True if successful, false if error.
+     */
     public static boolean deleteProfile(String profileName) {
         try {
             Files.deleteIfExists(Paths.get("data/" + profileName + ".csv"));
@@ -146,6 +151,11 @@ public class CSVPersistence {
         }
     }
 
+    /**
+     * Returns the next Id for a transaction object. If the corresponding .csv file has not been read yet, reads it.
+     * @param profileName Name of the profile.
+     * @return TransactionId to be used for transactions.
+     */
     public static synchronized int increment(String profileName) {
         if (currentMaxId == 0) {
             readFile(profileName);
