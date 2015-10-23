@@ -1,5 +1,6 @@
 package com.expenselog;
 
+import com.expenselog.persistence.CSVPersistence;
 import com.sun.org.apache.xml.internal.utils.StringBufferPool;
 
 import java.text.DateFormat;
@@ -17,7 +18,7 @@ import java.util.Date;
 public class Transaction {
 
 	public Transaction(Date date, double amount, String categoryName, String description, String profileName) {
-		this(date, amount, categoryName, description, profileName, 1);
+		this(date, amount, categoryName, description, profileName, CSVPersistence.increment(profileName));
 	}
 
 	public Transaction(Date date, double amount, String categoryName, String description, String profileName,
@@ -27,9 +28,7 @@ public class Transaction {
 		this.categoryName = categoryName;
 		this.description = description;
 		this.profileName = profileName;
-
-		// TODO implement ids.
-		this.transactionId = transactionId;
+        this.transactionId = transactionId;
 	}
 
 	public double getAmount() {

@@ -27,14 +27,15 @@ public class CSVPersistence {
 
     private static String currentProfileName;
     private static ArrayList<String> fileArray;
-    private static HashMap<Integer, String> transactionMap;
+    private static HashMap<Integer, Integer> transactionMap;
     private static boolean empty;
     private static boolean needUpdate = false;
+    private static int currentMaxId = 0;
 
     /**
      * This method saves an individual Transaction to the CSV file, and sets the "needUpdate" boolean flag to true.
-     * @param transaction
-     * @return
+     * @param transaction an object which should be saved
+     * @return true if save is successful, false otherwise.
      */
 
     public static boolean saveTransaction(Transaction transaction) {
@@ -86,15 +87,15 @@ public class CSVPersistence {
      * If a profile's file has been read already, the method will return its ArrayList already in memory, unless the
      * needUpdate variable is set to true, in which case it will re-read and update the internal variables.
      *
-     * @param profileName
-     * @return
+     * @param profileName The name of the profile, which is also the name for the file.
+     * @return returns an ArrayList containing the file, one line per index.
      */
     public static ArrayList<String> readFile(String profileName) {
         if (profileName.equals(currentProfileName) && !needUpdate) {
             return fileArray;
         }
 
-        transactionMap = new HashMap<Integer, String>();
+        transactionMap = new HashMap<Integer, Integer>();
         currentProfileName = profileName;
         fileArray = new ArrayList<String>();
 
@@ -109,8 +110,14 @@ public class CSVPersistence {
                 String line = null;
                 while ((line = reader.readLine()) != null) {
                     fileArray.add(line);
+
                     String[] lineArray = line.split(";");
-                    transactionMap.put(Integer.valueOf(lineArray[4]), line);
+                    int currentId = Integer.valueOf(lineArray[4]);
+                    transactionMap.put(currentId, fileArray.size() - 1);
+
+                    if (currentId > currentMaxId) {
+                        currentMaxId = currentId;
+                    }
                 }
                 reader.close();
             }
@@ -133,6 +140,14 @@ public class CSVPersistence {
             System.out.println("Couldn't delete file for some reason.");
             return false;
         }
+    }
+
+    public static synchronized int increment(String profileName) {
+        if (currentMaxId == 0) {
+            readFile(profileName);
+        }
+
+        return ++currentMaxId;
     }
 
 }
