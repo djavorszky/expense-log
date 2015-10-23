@@ -1,6 +1,7 @@
 package com.expenselog.test;
 
 import com.expenselog.Transaction;
+import com.expenselog.persistence.CSVPersistence;
 import org.junit.Test;
 
 import java.text.DateFormat;
@@ -15,11 +16,29 @@ import static org.junit.Assert.*;
 public class TransactionTest {
 
     @Test
+    public void testTransactionIds() throws Exception {
+        CSVPersistence.deleteProfile("MyProfile");
+
+        Date date = new Date();
+
+        Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
+        assertEquals(transaction.getTransactionId(), 1);
+
+        Transaction transaction2 = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
+        assertEquals(transaction2.getTransactionId(), 2);
+
+        Transaction transaction3 = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
+        assertEquals(transaction3.getTransactionId(), 3);
+    }
+
+    @Test
     public void testToString() throws Exception {
+        CSVPersistence.deleteProfile("MyProfile");
+
         Date date = new Date();
         DateFormat df = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
 
-        Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile", 1);
+        Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
 
         String transactionString = transaction.toString();
 
@@ -30,6 +49,8 @@ public class TransactionTest {
 
     @Test
     public void testToStringWithNewLine() throws Exception {
+        CSVPersistence.deleteProfile("MyProfile");
+
         Date date = new Date();
         DateFormat df = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
 
@@ -44,6 +65,8 @@ public class TransactionTest {
 
     @Test
     public void testToTransaction() throws Exception {
+        CSVPersistence.deleteProfile("MyProfile");
+
         String stringToTransaction = "17/Oct/2015 - 14:27;100.0;MyCategory;MyDescription;1";
 
         Transaction transaction = Transaction.toTransaction(stringToTransaction, "MyProfile");

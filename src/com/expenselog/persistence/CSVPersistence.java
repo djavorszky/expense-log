@@ -134,6 +134,10 @@ public class CSVPersistence {
     public static boolean deleteProfile(String profileName) {
         try {
             Files.deleteIfExists(Paths.get("data/" + profileName + ".csv"));
+            currentProfileName = null;
+            fileArray = null;
+            transactionMap = null;
+            currentMaxId = 0;
             return true;
         }
         catch (IOException ioe) {
