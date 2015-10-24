@@ -2,6 +2,8 @@ package com.expenselog.test;
 
 import com.expenselog.Transaction;
 import com.expenselog.persistence.CSVPersistence;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -17,89 +19,138 @@ import static org.junit.Assert.*;
  */
 public class CSVPersistenceTest {
 
-    @Test
-    public void testSaveTransaction() throws Exception {
-        CSVPersistence.deleteProfile("MyTestProfile");
+	@Before
+	public void setUp() throws Exception {
+		CSVPersistence.deleteProfile("MyTestProfile");
+		CSVPersistence.deleteProfile("MyOtherTestProfile");
+	}
 
-        Date date = new Date();
-        DateFormat df = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
+	@After
+	public void tearDown() throws Exception {
+		CSVPersistence.deleteProfile("MyTestProfile");
+		CSVPersistence.deleteProfile("MyOtherTestProfile");
+	}
 
-        Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyTestProfile", 1);
+	@Test
+	public void testSaveTransaction() throws Exception {
+		Date date = new Date();
+		DateFormat df = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
 
-        String transactionString = transaction.toString();
+		Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyTestProfile", 1);
 
-        String controlMessage = df.format(date) + ";100.0;MyCategory;MyDescription;1";
+		String transactionString = transaction.toString();
 
-        CSVPersistence.saveTransaction(transaction);
-        ArrayList<String> savedEntries = CSVPersistence.readFile("MyTestProfile");
+		String controlMessage = df.format(date) + ";100.0;MyCategory;MyDescription;1";
 
-        assertEquals(savedEntries.get(0), controlMessage);
-    }
+		CSVPersistence.saveTransaction(transaction);
+		ArrayList<String> savedEntries = CSVPersistence.readFile("MyTestProfile");
 
-    // TODO Write this.
-    @Test
-    public void testReadTransaction() throws Exception {
+		assertEquals(savedEntries.get(0), controlMessage);
+	}
 
-    }
+	// TODO Write this.
+	@Test
+	public void testReadTransaction() throws Exception {
+		Date date = new Date();
 
-    // TODO Write this.
-    @Test
-    public void testUpdateTransaction() throws Exception {
+		Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyTestProfile", 1);
+		Transaction transaction2 = new Transaction(date, 150.0, "MyCategory", "MyDescription", "MyTestProfile", 2);
+		Transaction transaction3 = new Transaction(date, 200.0, "MyCategory", "MyDescription", "MyTestProfile", 3);
 
-    }
+		CSVPersistence.saveTransaction(transaction);
+		CSVPersistence.saveTransaction(transaction2);
+		CSVPersistence.saveTransaction(transaction3);
 
-    // TODO Write this.
-    @Test
-    public void testDeleteTransaction() throws Exception {
+		Transaction readTransaction = CSVPersistence.readTransaction(1, "MyTestProfile");
+		Transaction readTransaction2 = CSVPersistence.readTransaction(2, "MyTestProfile");
+		Transaction readTransaction3 = CSVPersistence.readTransaction(3, "MyTestProfile");
 
-    }
+		assertEquals(transaction.getAmount(), readTransaction.getAmount(), 0);
+		assertEquals(transaction2.getAmount(), readTransaction2.getAmount(), 0);
+		assertEquals(transaction3.getAmount(), readTransaction3.getAmount(), 0);
+	}
 
-    @Test
-    public void testReadFile() throws Exception {
-        CSVPersistence.deleteProfile("MyTestProfile");
-        CSVPersistence.deleteProfile("MyOtherTestProfile");
+	@Test
+	public void testUpdateTransaction() throws Exception {
+		Date date = new Date();
 
-        // Test to see if it works with a not-yet existing file.
-        ArrayList<String> emptyFile = CSVPersistence.readFile("MyTestProfile");
+		Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyTestProfile", 1);
+		Transaction transaction2 = new Transaction(date, 150.0, "MyCategory", "MyDescription", "MyTestProfile", 2);
+		Transaction transaction3 = new Transaction(date, 200.0, "MyCategory", "MyDescription", "MyTestProfile", 3);
 
-        File file = new File("data/MyTestProfile.csv");
+		CSVPersistence.saveTransaction(transaction);
+		CSVPersistence.saveTransaction(transaction2);
+		CSVPersistence.saveTransaction(transaction3);
 
-        assertEquals(file.exists(), true);
-        assertEquals(emptyFile.isEmpty(), true);
+		Transaction transactionToUpdate = new Transaction(date, 300.0, "MyCategory", "MyDescription", "MyTestProfile");
 
-        // Test to see if after adding the transaction, the file is re-read.
-        Transaction transaction = new Transaction(new Date(), 100.0, "MyCategory", "MyDescription", "MyTestProfile");
-        CSVPersistence.saveTransaction(transaction);
+		CSVPersistence.updateTransaction(2, transactionToUpdate);
 
-        ArrayList<String> fileWithOneRecord = CSVPersistence.readFile("MyTestProfile");
+		Transaction updatedTransaction = CSVPersistence.readTransaction(2, "MyTestProfile");
+		assertEquals(updatedTransaction.getAmount(), 300.0, 0);
+	}
 
-        assertEquals(fileWithOneRecord.size(), 1);
+	// TODO Write this.
+	@Test
+	public void testDeleteTransaction() throws Exception {
+		Date date = new Date();
 
-        CSVPersistence.deleteProfile("MyTestProfile");
+		Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyTestProfile", 1);
+		Transaction transaction2 = new Transaction(date, 150.0, "MyCategory", "MyDescription", "MyTestProfile", 2);
+		Transaction transaction3 = new Transaction(date, 200.0, "MyCategory", "MyDescription", "MyTestProfile", 3);
 
-        // Test to see if a new, empty file is created.
+		CSVPersistence.saveTransaction(transaction);
+		CSVPersistence.saveTransaction(transaction2);
+		CSVPersistence.saveTransaction(transaction3);
 
-        ArrayList<String> newEmptyFile = CSVPersistence.readFile("MyOtherTestProfile");
-        assertEquals(newEmptyFile.isEmpty(), true);
+		ArrayList<String> readFile = CSVPersistence.readFile("MyTestProfile");
+		assertEquals(readFile.size(), 3);
 
-        CSVPersistence.deleteProfile("MyOtherTestProfile");
+		CSVPersistence.deleteTransaction(2, "MyTestProfile");
 
-    }
+		ArrayList<String> fileReadAfterDelete = CSVPersistence.readFile("MyTestProfile");
+		assertEquals(fileReadAfterDelete.size(), 2);
 
-    @Test
-    public void testDeleteProfile() throws Exception {
-        CSVPersistence.deleteProfile("MyTestProfile");
+	}
 
-        ArrayList<String> emptyFile = CSVPersistence.readFile("MyTestProfile");
+	@Test
+	public void testReadFile() throws Exception {
+		// Test to see if it works with a not-yet existing file.
+		ArrayList<String> emptyFile = CSVPersistence.readFile("MyTestProfile");
 
-        // Test if file is created
-        File file = new File("data/MyTestProfile.csv");
+		File file = new File("data/MyTestProfile.csv");
 
-        assertEquals(file.exists(), true);
+		assertEquals(file.exists(), true);
+		assertEquals(emptyFile.isEmpty(), true);
 
-        // Test if file gets deleted
-        CSVPersistence.deleteProfile("MyTestProfile");
+		// Test to see if after adding the transaction, the file is re-read.
+		Transaction transaction = new Transaction(new Date(), 100.0, "MyCategory", "MyDescription", "MyTestProfile");
+		CSVPersistence.saveTransaction(transaction);
 
-        assertEquals(file.exists(), false);
-    }
+		ArrayList<String> fileWithOneRecord = CSVPersistence.readFile("MyTestProfile");
+
+		assertEquals(fileWithOneRecord.size(), 1);
+
+		CSVPersistence.deleteProfile("MyTestProfile");
+
+		// Test to see if a new, empty file is created.
+
+		ArrayList<String> newEmptyFile = CSVPersistence.readFile("MyOtherTestProfile");
+		assertEquals(newEmptyFile.isEmpty(), true);
+	}
+
+	@Test
+	public void testDeleteProfile() throws Exception {
+		ArrayList<String> emptyFile = CSVPersistence.readFile("MyTestProfile");
+
+		// Test if file is created
+		File file = new File("data/MyTestProfile.csv");
+
+		assertEquals(file.exists(), true);
+
+		// Test if file gets deleted
+		CSVPersistence.deleteProfile("MyTestProfile");
+
+		assertEquals(file.exists(), false);
+	}
 }

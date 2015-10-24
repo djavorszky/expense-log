@@ -1,4 +1,4 @@
-package com.expenselog.tasks.exception;
+package com.expenselog.exception;
 
 /**
  * IncompleteTaskException should be thrown when a Task, or one of its subclasses doesn't have all the necessary
