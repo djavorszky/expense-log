@@ -71,6 +71,10 @@ public class DateUtil {
 	 * @return Date object based on the provided String, or null if parse wasn't successful.
 	 */
 	public static Date parseDate(String dateString) {
+		if (dateString == null) {
+			return new Date();
+		}
+
 		for (SimpleDateFormat format : dateFormats) {
 			try {
 				Date date = format.parse(dateString);

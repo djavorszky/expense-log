@@ -1,9 +1,8 @@
 package com.expenselog.tasks;
 
-import com.expenselog.tasks.exception.IncompleteTaskException;
+import com.expenselog.exception.IncompleteTaskException;
 
 import java.util.Date;
-import java.util.HashMap;
 
 /**
  * The abstract Task class should be extended by each tasks. It provides the bare necessities that every Task object

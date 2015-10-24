@@ -15,71 +15,71 @@ import static org.junit.Assert.*;
  */
 public class TransactionTest {
 
-    @Test
-    public void testTransactionIds() throws Exception {
-        CSVPersistence.deleteProfile("MyProfile");
+	@Test
+	public void testTransactionIds() throws Exception {
+		CSVPersistence.deleteProfile("MyProfile");
 
-        Date date = new Date();
+		Date date = new Date();
 
-        Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
-        assertEquals(transaction.getTransactionId(), 1);
+		Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
+		assertEquals(transaction.getTransactionId(), 1);
 
-        Transaction transaction2 = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
-        assertEquals(transaction2.getTransactionId(), 2);
+		Transaction transaction2 = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
+		assertEquals(transaction2.getTransactionId(), 2);
 
-        Transaction transaction3 = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
-        assertEquals(transaction3.getTransactionId(), 3);
-    }
+		Transaction transaction3 = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
+		assertEquals(transaction3.getTransactionId(), 3);
+	}
 
-    @Test
-    public void testToString() throws Exception {
-        CSVPersistence.deleteProfile("MyProfile");
+	@Test
+	public void testToString() throws Exception {
+		CSVPersistence.deleteProfile("MyProfile");
 
-        Date date = new Date();
-        DateFormat df = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
+		Date date = new Date();
+		DateFormat df = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
 
-        Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
+		Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
 
-        String transactionString = transaction.toString();
+		String transactionString = transaction.toString();
 
-        String controlMessage = df.format(date) + ";100.0;MyCategory;MyDescription;1";
+		String controlMessage = df.format(date) + ";100.0;MyCategory;MyDescription;1";
 
-        assertEquals(transactionString, controlMessage);
-    }
+		assertEquals(transactionString, controlMessage);
+	}
 
-    @Test
-    public void testToStringWithNewLine() throws Exception {
-        CSVPersistence.deleteProfile("MyProfile");
+	@Test
+	public void testToStringWithNewLine() throws Exception {
+		CSVPersistence.deleteProfile("MyProfile");
 
-        Date date = new Date();
-        DateFormat df = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
+		Date date = new Date();
+		DateFormat df = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
 
-        Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
+		Transaction transaction = new Transaction(date, 100.0, "MyCategory", "MyDescription", "MyProfile");
 
-        String transactionString = transaction.toString(true);
+		String transactionString = transaction.toString(true);
 
-        String controlMessage = df.format(date) + ";100.0;MyCategory;MyDescription;1" + System.lineSeparator();
+		String controlMessage = df.format(date) + ";100.0;MyCategory;MyDescription;1" + System.lineSeparator();
 
-        assertEquals(transactionString, controlMessage);
-    }
+		assertEquals(transactionString, controlMessage);
+	}
 
-    @Test
-    public void testToTransaction() throws Exception {
-        CSVPersistence.deleteProfile("MyProfile");
+	@Test
+	public void testToTransaction() throws Exception {
+		CSVPersistence.deleteProfile("MyProfile");
 
-        String stringToTransaction = "17/Oct/2015 - 14:27;100.0;MyCategory;MyDescription;1";
+		String stringToTransaction = "17/Oct/2015 - 14:27;100.0;MyCategory;MyDescription;1";
 
-        Transaction transaction = Transaction.toTransaction(stringToTransaction, "MyProfile");
+		Transaction transaction = Transaction.toTransaction(stringToTransaction, "MyProfile");
 
-        DateFormat df = new SimpleDateFormat("dd/MMM/yyy - HH:mm");
-        Date date = df.parse("17/Oct/2015 - 14:27");
+		DateFormat df = new SimpleDateFormat("dd/MMM/yyy - HH:mm");
+		Date date = df.parse("17/Oct/2015 - 14:27");
 
-        assertNotEquals(transaction, null);
-        assertEquals(transaction.getAmount(), 100.0, 0);
-        assertEquals(transaction.getCategoryName(), "MyCategory");
-        assertEquals(transaction.getDate(), date);
-        assertEquals(transaction.getDescription(), "MyDescription");
-        assertEquals(transaction.getTransactionId(), 1);
-        assertEquals(transaction.getProfileName(), "MyProfile");
-    }
+		assertNotEquals(transaction, null);
+		assertEquals(transaction.getAmount(), 100.0, 0);
+		assertEquals(transaction.getCategoryName(), "MyCategory");
+		assertEquals(transaction.getDate(), date);
+		assertEquals(transaction.getDescription(), "MyDescription");
+		assertEquals(transaction.getTransactionId(), 1);
+		assertEquals(transaction.getProfileName(), "MyProfile");
+	}
 }
