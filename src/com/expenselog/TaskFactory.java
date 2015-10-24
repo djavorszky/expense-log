@@ -47,19 +47,10 @@ public class TaskFactory {
 			}
 
 			String dateString = MainArg.DATE.getValue();
-			DateFormat df = new SimpleDateFormat("dd/MMM/yyyy - HH:mm");
 
-			Date date = null;
-			if (dateString != null) {
-				try {
-					date = df.parse(dateString);
-				}
-				catch (ParseException pe) {
-					pe.printStackTrace();
-					date = new Date();
-				}
-			}
-			else {
+			Date date = DateUtil.parseDate(dateString);
+
+			if (date == null) {
 				date = new Date();
 			}
 
